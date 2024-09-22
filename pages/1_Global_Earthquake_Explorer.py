@@ -19,19 +19,26 @@ st.markdown(
     """
 )
 
-
-
 @st.cache_data
 def load_data():
     df = pd.read_csv("data/earthquake.csv")
     df = df.dropna(subset=["Latitude", "Longitude", "Magnitude", "Depth"])
     df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
     df = df.dropna(subset=["Date"])
+    df.rename(
+        columns={
+            "Latitude": "latitude",
+            "Longitude": "longitude",
+            "Magnitude": "magnitude",
+            "Depth": "depth",
+            "Location Name": "location_name",
+        },
+        inplace=True,
+    )
     df.reset_index(drop=True, inplace=True)
     return df
 
 df = load_data()
-
 
 # Sidebar Controls
 st.sidebar.header("Filter Options")
